@@ -1,0 +1,16 @@
+# base image
+FROM continuumio/miniconda3:4.7.10
+
+# load in the environment.yml file
+ADD ./docker/environment.yml /
+
+# Updating setuptools to remove a bug when updating conda
+RUN conda update -n base -c defaults conda setuptools
+
+# create the environment
+RUN conda update -n base conda -y && conda env update
+
+# add the code folder and notebooks folder to the docker image - this allows us to run
+# the image directly without relying on docker-compose or local file dependenciess
+ADD ./code/ /code
+ADD ./notebooks /notebooks
